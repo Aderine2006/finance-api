@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Finance API UI</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f7fa;
+        padding: 40px;
+        color: #333;
+    }
+
+    h1 {
+        text-align: center;
+        color: #2c3e50;
+    }
+
+    .container {
+        width: 650px;
+        margin: auto;
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .section {
+        margin-bottom: 25px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    label {
+        font-weight: bold;
+    }
+
+    input {
+        width: 95%;
+        padding: 8px;
+        margin-top: 5px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+    }
+
+    button {
+        margin-top: 12px;
+        padding: 10px 20px;
+        background: #3498db;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 15px;
+    }
+
+    button:hover {
+        background: #2980b9;
+    }
+
+    .output {
+        margin-top: 20px;
+        background: #ecf0f1;
+        padding: 15px;
+        border-radius: 6px;
+        white-space: pre-wrap;
+        font-size: 14px;
+    }
+</style>
+</head>
+<body>
+
+<h1>📈 Finance Data API UI</h1>
+
+<div class="container">
+
+    <!-- SYMBOL INPUT -->
+    <div class="section">
+        <label>Enter Symbol:</label>
+        <input type="text" id="symbol" placeholder="Example: AAPL">
+    </div>
+
+    <!-- DATE INPUTS -->
+    <div class="section">
+        <label>Start Date:</label>
+        <input type="date" id="start">
+
+        <label>End Date:</label>
+        <input type="date" id="end">
+    </div>
+
+    <!-- BUTTONS -->
+    <div class="section">
+        <button onclick="getCompanyInfo()">Get Company Info</button>
+        <button onclick="getStockData()">Get Stock Data</button>
+        <button onclick="getHistoricalData()">Get Historical Data</button>
+        <button onclick="getAnalysis()">Get Analysis</button>
+    </div>
+
+    <!-- OUTPUT BOX -->
+    <h3>Response Output:</h3>
+    <div class="output" id="output">Results will appear here...</div>
+
+</div>
+
+<script>
+const BASE_URL = "http://127.0.0.1:5000";
+
+// Display output
+function show(data) {
+    document.getElementById("output").textContent = JSON.stringify(data, null, 2);
+}
+
+// GET COMPANY INFO
+async function getCompanyInfo() {
+    const symbol = document.getElementById("symbol").value;
+    const res = await fetch(`${BASE_URL}/company-info?symbol=${symbol}`);
+    show(await res.json());
+}
+
+// GET STOCK DATA
+async function getStockData() {
+    const symbol = document.getElementById("symbol").value;
+    const res = await fetch(`${BASE_URL}/stock-data?symbol=${symbol}`);
+    show(await res.json());
+}
+
+// POST HISTORICAL DATA
+async function getHistoricalData() {
+    const symbol = document.getElementById("symbol").value;
+    const start = document.getElementById("start").value;
+    const end = document.getElementById("end").value;
+
+    const res = await fetch(`${BASE_URL}/historical-data`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ symbol, start, end })
+    });
+
+    show(await res.json());
+}
+
+// POST ANALYSIS
+async function getAnalysis() {
+    const symbol = document.getElementById("symbol").value;
+    const start = document.getElementById("start").value;
+    const end = document.getElementById("end").value;
+
+    const res = await fetch(`${BASE_URL}/analysis`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ symbol, start, end })
+    });
+
+    show(await res.json());
+}
+</script>
+
+</body>
+</html>
